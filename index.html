@@ -312,6 +312,16 @@ from <code>NEAB/scripts/tide_reference.py</code>.</p>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_m2.png" aria-label="Open TPXO9-atlas M2 full size"><img src="fig/tpxo9_m2.png" alt="TPXO9-atlas M2" loading="lazy"></button><figcaption><strong>TPXO9-atlas M2</strong><p>M2 amplitude and cotidal lines every 30° (Greenwich phase) over the whole box; red, dashed: the AMM7 domain.</p></figcaption></figure>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_m2_zooms.png" aria-label="Open M2 in the North Sea and the Baltic full size"><img src="fig/tpxo9_m2_zooms.png" alt="M2 in the North Sea and the Baltic" loading="lazy"></button><figcaption><strong>M2 in the North Sea and the Baltic</strong><p>Left: the North Sea and its three amphidromes. Right: the Baltic with the colour scale to 5 cm.</p></figcaption></figure>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_constituents.png" aria-label="Open All twelve constituents full size"><img src="fig/tpxo9_constituents.png" alt="All twelve constituents" loading="lazy"></button><figcaption><strong>All twelve constituents</strong><p>Amplitude and cotidal lines every 30° for each constituent, each with its own colour scale.</p></figcaption></figure>
+<h3 id="series">Tidal series</h3>
+<p>The same TPXO9 constituents give time series at any point, predicted as pyGETM does at its open boundaries (all
+twelve constituents, nodal corrections), with model runs on top (<code>NEAB/scripts/tide_series.py</code>). January
+2020 in the Bristol Channel (Hinkley Point) and at Saint-Malo, two of the largest tides in the area, both with a
+range of over 11 m at springs, against NEAB's control run. The series are taken at the nearest TPXO9 node with
+tidal constants: at Hinkley Point that is 11 km out in the channel (M2 3.72 m against 3.92 m at the gauge), at
+Saint-Malo 3 km off (3.68 m against 3.67 m). NEAB's spring tides in the Bristol Channel are about 0.5 m too
+small, and its neaps at Saint-Malo a little too large. Part of the rms difference comes from NEAB's hourly
+output, which cuts the peaks.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_series_neab.png" aria-label="Open January 2020 at Hinkley Point and Saint-Malo full size"><img src="fig/tpxo9_series_neab.png" alt="January 2020 at Hinkley Point and Saint-Malo" loading="lazy"></button><figcaption><strong>January 2020 at Hinkley Point and Saint-Malo</strong><p>TPXO9 (black) and NEAB's control run (north_sea_baltic, 31 days, z0 0.015 m), shifted to zero mean; the rms difference is in the legend.</p></figcaption></figure>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_baltic_s2_k1_o1.png" aria-label="Open S2, K1 and O1 in the Baltic full size"><img src="fig/tpxo9_baltic_s2_k1_o1.png" alt="S2, K1 and O1 in the Baltic" loading="lazy"></button><figcaption><strong>S2, K1 and O1 in the Baltic</strong><p>In the central Baltic the diurnal K1 and O1 are as large as M2: medians of 0.6–0.7 cm.</p></figcaption></figure>
 </section>
 <section id="uses" class="chapter"><header class="chap"><span class="eyebrow">Uses</span><h2>Boundaries for other setups</h2></header>
