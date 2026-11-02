@@ -239,6 +239,7 @@ north-western shelf), but that is a smaller effect.</li></ul>
 <tr><td>minimum depth 2 m (411 more wet cells, most of them outside the North Sea)</td><td>1.73</td><td>2.09</td><td>0.25 m</td></tr>
 <tr><td>z0 ten times larger (0.15 m) in the Wadden zone, 4,555 km² shallower than 10 m</td><td>1.85</td><td>2.42</td><td>0.29 m</td></tr>
 <tr><td>a <a href="#wadden">Wadden Sea level</a> with the intertidal flats (1.5 km), z0 0.015 m</td><td>1.54</td><td>2.04</td><td>0.25 m</td></tr>
+<tr><td>the same, z0 0.002 m in the Wadden Sea level</td><td>1.51</td><td>1.81</td><td>0.22 m</td></tr>
 </tbody></table></div>
 <p>A few more shallow cells along the coasts move the German Bight amphidrome and lower the Skagerrak by 13 %.
 Much more friction over the shallow water that is already there does almost nothing, except locally. So it is
@@ -260,23 +261,28 @@ level, where north_sea_baltic has land.</p>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/wadden_bathymetry.png" aria-label="Open The Wadden Sea level's bathymetry full size"><img src="fig/wadden_bathymetry.png" alt="The Wadden Sea level's bathymetry" loading="lazy"></button><figcaption><strong>The Wadden Sea level's bathymetry</strong><p>Left: depth below MSL at 1.5 km (red line: MSL; white: 2 m). Right: MSL − LAT from TPXO9, taken in open water and carried to the coast. Inland, where it is carried along the rivers, it is not used.</p></figcaption></figure>
 <p>A first 31-day run with the Wadden Sea level (z0 0.015 m everywhere, as the control run) shows that the flats
 are the lever, but this time the effect is too strong. M2 amplitude as a ratio to TPXO9, and at the gauges:</p>
-<div class="tablewrap num"><table><thead><tr><th></th><th>TPXO9 / observed</th><th>control (5 m)</th><th>Wadden level</th></tr></thead><tbody>
-<tr><td>off Jutland (6–8°E), ratio</td><td>0.14 m</td><td>1.86</td><td>1.54</td></tr>
-<tr><td>Skagerrak, ratio</td><td>0.10 m</td><td>2.40</td><td>2.04</td></tr>
-<tr><td>German Bight offshore, ratio</td><td>0.65 m</td><td>0.99</td><td>0.86</td></tr>
-<tr><td>Skagen</td><td>0.14 m</td><td>0.29 m</td><td>0.25 m</td></tr>
-<tr><td>Helgoland</td><td>1.06 m</td><td>0.98 m</td><td>0.84 m</td></tr>
-<tr><td>Cuxhaven, Mittelgrund</td><td>1.37 m</td><td>1.22 m</td><td>0.95 m</td></tr>
-<tr><td>Wilhelmshaven</td><td>1.70 m</td><td>1.27 m</td><td>0.99 m</td></tr>
-<tr><td>Eemshaven</td><td>1.15 m</td><td>1.00 m</td><td>0.74 m</td></tr>
-<tr><td>List auf Sylt</td><td>0.78 m</td><td>0.86 m</td><td>0.55 m</td></tr>
-<tr><td>all 369 gauges, rms error</td><td></td><td>0.17 m</td><td>0.21 m</td></tr>
+<div class="tablewrap num"><table><thead><tr><th></th><th>TPXO9 / observed</th><th>control (5 m)</th><th>Wadden, z0 0.015 m</th><th>Wadden, z0 0.002 m</th></tr></thead><tbody>
+<tr><td>off Jutland (6–8°E), ratio</td><td>0.14 m</td><td>1.86</td><td>1.54</td><td>1.51</td></tr>
+<tr><td>Skagerrak, ratio</td><td>0.10 m</td><td>2.40</td><td>2.04</td><td>1.81</td></tr>
+<tr><td>German Bight offshore, ratio</td><td>0.65 m</td><td>0.99</td><td>0.86</td><td>0.88</td></tr>
+<tr><td>Skagen</td><td>0.14 m</td><td>0.29 m</td><td>0.25 m</td><td>0.22 m</td></tr>
+<tr><td>Helgoland</td><td>1.06 m</td><td>0.98 m</td><td>0.84 m</td><td>0.91 m</td></tr>
+<tr><td>Cuxhaven, Mittelgrund</td><td>1.37 m</td><td>1.22 m</td><td>0.95 m</td><td>1.11 m</td></tr>
+<tr><td>Wilhelmshaven</td><td>1.70 m</td><td>1.27 m</td><td>0.99 m</td><td>1.19 m</td></tr>
+<tr><td>Eemshaven</td><td>1.15 m</td><td>1.00 m</td><td>0.74 m</td><td>0.89 m</td></tr>
+<tr><td>List auf Sylt</td><td>0.78 m</td><td>0.86 m</td><td>0.55 m</td><td>0.65 m</td></tr>
+<tr><td>all 369 gauges, rms error</td><td></td><td>0.17 m</td><td>0.21 m</td><td>0.19 m</td></tr>
 </tbody></table></div>
 <p>The flats lower the Skagerrak and off Jutland by 15–20 %, and the Kattegat gauges with them, more than any of
 the sensitivity runs above. But they also take 15–25 % of the tide in the German Bight and the Wadden Sea itself,
 which was about right or too small before. With z0 0.015 m the drag on water less than a metre deep is several
-times that in 20 m, so the flats likely dissipate too much. A second run, with z0 0.002 m in the Wadden Sea level
-only, is under way.</p>
+times that in 20 m, so the flats likely dissipate too much. A second run with z0 0.002 m in the Wadden Sea level
+only (north_sea_baltic keeps 0.015 m) helps on both sides. The Skagerrak comes down further, to 1.81 times TPXO9,
+and Skagen to 0.22 m. In the Wadden Sea about half of the lost tide comes back, but it is still lower than in the
+control run, and the error over all gauges is 0.19 m against 0.17 m. Lower friction also lowering the Skagerrak
+shows that the flats act through where the tide goes, not only through what they dissipate. Next steps: a z0
+that depends on depth or on the bed over the flats, and checking the flats' heights (MSL − LAT from the
+amplitude sum is an upper bound). Production runs need a closer look at the bathymetry in any case.</p>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/wadden_vs_tpxo_m2.png" aria-label="Open M2 with the Wadden Sea level full size"><img src="fig/wadden_vs_tpxo_m2.png" alt="M2 with the Wadden Sea level" loading="lazy"></button><figcaption><strong>M2 with the Wadden Sea level</strong><p>North_sea_baltic with the Wadden Sea level, against TPXO9 (as the figure above). Where the Wadden Sea level computes, north_sea_baltic has no values.</p></figcaption></figure>
 </section>
 <section id="uses" class="chapter"><header class="chap"><span class="eyebrow">Uses</span><h2>Boundaries for other setups</h2></header>
