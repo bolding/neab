@@ -148,7 +148,7 @@ dialog#lightbox::backdrop { background: rgb(8 14 18 / 0.86); }
 .foot { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.88rem; color: var(--ink-2); }
 </style>
 <style>main > .chapter { max-width: var(--wide); }</style></head><body>
-<div class="topbar"><div class="topin"><a class="brand" href="#top">NEAB</a><nav aria-label="Chapters"><a href="#setup">Setup</a><a href="#tides">Runs</a><a href="#northsea">North Sea</a><a href="#uses">Uses</a></nav></div></div>
+<div class="topbar"><div class="topin"><a class="brand" href="#top">NEAB</a><nav aria-label="Chapters"><a href="#setup">Setup</a><a href="#tides">Runs</a><a href="#northsea">North Sea</a><a href="#uses">Uses</a><a href="#pygetm">pyGETM</a></nav></div></div>
 <main id="top">
 <header class="hero">
   <p class="draft">Under development · updated 2 November 2026</p>
@@ -253,6 +253,37 @@ without interpolation. The first user is <a href="https://bolding.github.io/dkm/
 with their fjords: its root and its Belt Sea level take their open boundaries from NEAB, TPXO9 or CMEMS.
 Through NEAB, DKm inherits the Kattegat error described above. With TPXO9 at its boundaries, DKm has the
 Kattegat tide right.</p>
+</section>
+<section id="pygetm" class="chapter"><header class="chap"><span class="eyebrow">Code</span><h2>What the nesting changes in pyGETM</h2></header>
+<p>The nesting itself is a new package, <code>pygetm.nesting</code>: about 4,000 lines of Python with mpi4py, holding
+the geometry of the levels, the MPI exchanges, restriction, flux matching and the time loop. It attaches to each
+model through a small set of hooks in pyGETM's core: about 400 changed lines in twelve files. All of them are optional.
+A model without nesting runs exactly as before (the optional arguments default to nothing), with one exception: a
+bug fix in the transport damping.</p>
+<div class="tablewrap"><table><thead><tr><th>Where</th><th>Change</th><th>Why</th></tr></thead><tbody>
+<tr><th colspan="3">Fortran</th></tr>
+<tr><td><code>advection.F90.template</code>, <code>advection_base.F90</code></td><td><code>u2d</code>/<code>v2d</code>: optional
+<code>flux_acc</code>, which accumulates dt × the flux through each face. Faces of type EXTERNAL (5) count as open in the stencils.</td>
+<td>Tracer flux matching at the interfaces; advection into and out of the ring</td></tr>
+<tr><td><code>wrapper.F90</code>, <code>_pygetm.pyx</code></td><td>Pass the optional flux array through (NULL: as before)</td><td>As above</td></tr>
+<tr><th colspan="3">Python core (injections)</th></tr>
+<tr><td><code>constants.py</code>, <code>core.py</code></td><td>New cell type <code>CellType.EXTERNAL</code>: wet and with open faces, but its
+values are set from outside, not by the model. Valid wherever ACTIVE is.</td><td>A child's ring and a parent's hole</td></tr>
+<tr><td><code>domain.py</code></td><td><code>Domain.external</code>: the cells that become EXTERNAL. U, V and X points with external cells on all
+sides become EXTERNAL too. <code>Domain.tiling_mask</code>: subdomains with none of these cells are dropped.</td><td>Ring and hole; no cores for the
+parent's water under a child</td></tr>
+<tr><td><code>simulation.py</code></td><td>A <code>Coupler</code> class and <code>add_coupler()</code>. Hooks: <code>on_start</code>,
+<code>before_state_update</code>, <code>after_state_update</code>, <code>on_stage</code> (after <code>transports_2d</code>,
+<code>elevation</code>, <code>momentum_3d</code>, <code>tracers</code>) and <code>on_finish</code>.</td><td>All exchanges between the levels happen here</td></tr>
+<tr><td><code>operators.py</code></td><td><code>Advection(..., flux_u=, flux_v=)</code></td><td>Python side of the face fluxes</td></tr>
+<tr><td><code>momentum.py</code></td><td>Transport damping (An) is defined at EXTERNAL faces. <b>Bug fix:</b> the damping was multiplied by the time step twice (also upstream).</td>
+<td>Sponge at a child's interface; stability</td></tr>
+<tr><td><code>parallel.py</code></td><td><code>get_logger(name=)</code>, <code>file_prefix()</code></td><td>Several models in one MPI job, each with its own logs and dumps</td></tr>
+<tr><td><code>util/interpolate.py</code></td><td><code>interp_columns</code>: vertical interpolation between water columns of different depth</td><td>Parent → child in 3D (in preparation)</td></tr>
+<tr><td><code>input/tpxo.py</code></td><td><code>tpxo.get(..., components=)</code></td><td>Convenience: a subset of the constituents</td></tr>
+</tbody></table></div>
+<p class="small">So far the nesting is 2D (barotropic) only. The 3D hooks (<code>momentum_3d</code>, <code>tracers</code>) and the tracer face fluxes are there, but
+the 3D exchanges are not done yet. Interfaces between two sibling children that touch are designed but not yet implemented.</p>
 </section>
 <footer class="foot"><p>NEAB is built with the two-way nesting for pyGETM developed by Bolding &amp; Bruggeman (fork <code>bolding/pygetm</code>, branch <code>nesting-mpmd</code>). The code of the setup is not public yet. Bathymetry: GEBCO, EMODnet; tides: TPXO9; gauges: GESLA. Related: <a href="https://bolding.github.io/dkm/">DKm</a>.</p><p>Karsten Bolding, Bolding &amp; Bruggeman.</p></footer>
 </main>
