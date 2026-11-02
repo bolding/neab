@@ -148,10 +148,10 @@ dialog#lightbox::backdrop { background: rgb(8 14 18 / 0.86); }
 .foot { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.88rem; color: var(--ink-2); }
 </style>
 <style>main > .chapter { max-width: var(--wide); }</style></head><body>
-<div class="topbar"><div class="topin"><a class="brand" href="#top">NEAB</a><nav aria-label="Chapters"><a href="#setup">Setup</a><a href="#tides">Runs</a><a href="#uses">Uses</a></nav></div></div>
+<div class="topbar"><div class="topin"><a class="brand" href="#top">NEAB</a><nav aria-label="Chapters"><a href="#setup">Setup</a><a href="#tides">Runs</a><a href="#northsea">North Sea</a><a href="#uses">Uses</a></nav></div></div>
 <main id="top">
 <header class="hero">
-  <p class="draft">Under development · updated 1 November 2026</p>
+  <p class="draft">Under development · updated 2 November 2026</p>
   <h1>NEAB: North-East Atlantic–Baltic</h1>
   <p class="lede">Five pyGETM models from the NE Atlantic at 6.5 km down to the Danish straits at 0.25 km,
   coupled by two-way nesting. Each level has its own grid, time step and cores; all of them compute at the same time.
@@ -159,7 +159,7 @@ dialog#lightbox::backdrop { background: rgb(8 14 18 / 0.86); }
   <dl class="facts">
     <div><dt>levels</dt><dd>5</dd><p>6.5 km to 0.25 km</p></div>
     <div><dt>refinement</dt><dd>3 × 3</dd><p>time ratio 1 or 3</p></div>
-    <div><dt>31 days, coarse</dt><dd>31 min</dd><p>on 64 cores</p></div>
+    <div><dt>31 days, coarse</dt><dd>21 min</dd><p>on 64 cores</p></div>
     <div><dt>tide gauges</dt><dd>685</dd><p>GESLA comparison</p></div>
   </dl>
 </header>
@@ -205,16 +205,46 @@ one MPMD component per model, pinned to cores on a 64-core server: <strong>31 mi
 100 minutes on 18 cores before. Against 685 GESLA gauges the result is unchanged, as expected: the west
 interfaces it removes were a few cells in small fjords.</p>
 <div class="tablewrap num"><table><thead><tr><th>Model</th><th>Gauges</th><th>M2 vector rms before → after</th><th>S2</th><th>K1</th></tr></thead><tbody><tr><td>neab_root</td><td>124</td><td>0.251 → 0.251 m</td><td>0.100 → 0.100 m</td><td>0.055 → 0.055 m</td></tr><tr><td>north_sea_baltic</td><td>463</td><td>0.348 → 0.348 m</td><td>0.143 → 0.143 m</td><td>0.053 → 0.053 m</td></tr><tr><td>danish_straits</td><td>89</td><td>0.077 → 0.076 m</td><td>0.021 → 0.021 m</td><td>0.013 → 0.013 m</td></tr><tr><td>northern_little_belt</td><td>1</td><td>0.221 → 0.221 m</td><td>0.068 → 0.068 m</td><td>0.005 → 0.005 m</td></tr><tr><td>northern_sound</td><td>8</td><td>0.067 → 0.066 m</td><td>0.019 → 0.019 m</td><td>0.010 → 0.010 m</td></tr></tbody></table></div>
-<p class="small">Time per model in that run: north_sea_baltic spends 29 % computing and 55 % in nesting work
-(restriction, flux matching, ring values), so the nesting work, not the exchange (below 0.3 %), is the next
-thing to make faster.</p>
+<p class="small">Since then the order of the exchanges in a sync has changed: one halo update per sync, the
+children's data sent up first (bit-identical results). The same 31-day run now takes <strong>21 minutes</strong> on
+64 cores. Timers in the halo updates showed that most of what had looked like nesting work was waiting for
+the other models; the nesting's own work (restriction, flux matching, ring values) is 6–14 % of the time.</p>
+</section>
+<section id="northsea" class="chapter"><header class="chap"><span class="eyebrow">Open issue</span><h2>The tide east of the Skagerrak amphidrome</h2></header>
+<p>Over most of the North Sea NEAB's M2 is within 10–15 % of TPXO9. From the Danish North Sea coast into the
+Skagerrak and the Kattegat it is about twice too large (Skagen 0.29 m against 0.14 m observed). The error is
+the same at both resolutions, and a bottom roughness map from the seabed substrate does not remove it.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/neab_vs_tpxo_m2.png" aria-label="Open NEAB against TPXO9 in the North Sea full size"><img src="fig/neab_vs_tpxo_m2.png" alt="NEAB against TPXO9 in the North Sea" loading="lazy"></button><figcaption><strong>NEAB against TPXO9 in the North Sea</strong><p>M2 of north_sea_baltic (coarse, 31 days, z0 0.015 m) and of TPXO9 at the same cells, both fitted from hourly elevation over the same 30 days. Right: the amplitude ratio. TPXO9 is fitted to observations and serves as the reference offshore.</p></figcaption></figure>
+<div class="tablewrap num"><table><thead><tr><th>Region</th><th>TPXO9 M2</th><th>NEAB / TPXO9</th></tr></thead><tbody>
+<tr><td>Northern North Sea</td><td>0.42 m</td><td>1.13</td></tr>
+<tr><td>Central North Sea</td><td>0.41 m</td><td>1.10</td></tr>
+<tr><td>Channel</td><td>2.58 m</td><td>0.97</td></tr>
+<tr><td>Southern Bight</td><td>0.49 m</td><td>0.81</td></tr>
+<tr><td>German Bight, offshore</td><td>0.66 m</td><td>0.99</td></tr>
+<tr><td>Off Jutland (6–8°E)</td><td>0.14 m</td><td>1.86</td></tr>
+<tr><td>Skagerrak</td><td>0.10 m</td><td>2.40</td></tr>
+</tbody></table></div>
+<p>The amphidrome in front of the German Bight lies about 0.3° south-west of TPXO9's. The region off Jutland and
+the Skagerrak lies between that amphidrome and the Norwegian one. Its small amplitudes are very sensitive to
+where the amphidromes are, so a small shift doubles them there. The most likely cause is too little
+dissipation in the south-eastern North Sea:</p>
+<ul><li>The Wadden Sea flats are not in the bathymetry: after the regridding they are land or have no depth
+(the sources refer to the lowest astronomical tide).</li>
+<li>The models mask water shallower than 5 m.</li>
+<li>The tide coming in from the Atlantic is also 5–17 % too large (no tidal potential, 12 km cells over the
+north-western shelf), but that is a smaller effect.</li></ul>
+<p>Sensitivity runs (minimum depth 2 m, a much larger roughness in the Wadden Sea) are under way. The remedy is a Wadden Sea
+bathymetry with its intertidal flats, and the Wadden Sea level proposed above. Before production runs, every
+level's bathymetry has to be checked carefully.</p>
 </section>
 <section id="uses" class="chapter"><header class="chap"><span class="eyebrow">Uses</span><h2>Boundaries for other setups</h2></header>
 <p>A NEAB run can write hourly elevation, transports and velocities of its levels. <code>nesting-boundaries</code>
-turns them into open-boundary forcing for another model: at every point the finest NEAB level with water there is used,
-and the result is a lon/lat file like a CMEMS product, which pyGETM interpolates to the open boundaries itself.
-The first user is <a href="https://bolding.github.io/dkm/">DKm</a>, the Danish waters with their fjords, whose root
-takes its tides from NEAB's north_sea_baltic and danish_straits levels.</p>
+samples them at another model's open-boundary points, taking at every point the finest NEAB level with water
+there. The result is a file in the layout of the OceanICU NSe setup, which pyGETM reads on its own grid
+without interpolation. The first user is <a href="https://bolding.github.io/dkm/">DKm</a>, the Danish waters
+with their fjords: its root and its Belt Sea level take their open boundaries from NEAB, TPXO9 or CMEMS.
+Through NEAB, DKm inherits the Kattegat error described above. With TPXO9 at its boundaries, DKm has the
+Kattegat tide right.</p>
 </section>
 <footer class="foot"><p>NEAB is built with the two-way nesting for pyGETM developed by Bolding &amp; Bruggeman (fork <code>bolding/pygetm</code>, branch <code>nesting-mpmd</code>). The code of the setup is not public yet. Bathymetry: GEBCO, EMODnet; tides: TPXO9; gauges: GESLA. Related: <a href="https://bolding.github.io/dkm/">DKm</a>.</p><p>Karsten Bolding, Bolding &amp; Bruggeman.</p></footer>
 </main>
