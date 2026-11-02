@@ -244,6 +244,19 @@ Much more friction over the shallow water that is already there does almost noth
 the missing area of shallow water and flats, and their volume, that matters, more than the friction on them.
 The remedy is a Wadden Sea bathymetry with its intertidal flats, and the Wadden Sea level proposed above. Before
 production runs, every level's bathymetry has to be checked carefully.</p>
+<h3 id="wadden">A Wadden Sea level</h3>
+<p>A sixth level, <code>wadden</code>, nests in north_sea_baltic over the Wadden Sea from Den Helder to Skallingen
+(4.6–9.2°E, 52.9–55.7°N) at ratio 3, about 1.5 km in the coarse setup, with the open North Sea in front of it. Its
+bathymetry includes the intertidal flats:</p>
+<ul><li>EMODnet without its land mask: the flats keep their height above the lowest astronomical tide (LAT).</li>
+<li>Land is taken from the Natural Earth land polygons, not from the sign of the depth, so the polders behind the
+dikes, below sea level, stay land.</li>
+<li>The depths are taken from LAT to mean sea level: MSL − LAT is estimated from TPXO9 as the sum of its
+constituents' amplitudes, about 1.2–1.5 m along the Dutch coast, 2–2.5 m in the German Bight and 1 m at Esbjerg.</li>
+<li>Water up to 1 m above MSL is kept wet. pyGETM's drying and flooding handles the flats.</li></ul>
+<p>Most of the flats then lie 0–2 m below MSL: 3,800 km² that fall dry at the lowest tide are water in this
+level, where north_sea_baltic has land. A first 31-day run is under way.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/wadden_bathymetry.png" aria-label="Open The Wadden Sea level's bathymetry full size"><img src="fig/wadden_bathymetry.png" alt="The Wadden Sea level's bathymetry" loading="lazy"></button><figcaption><strong>The Wadden Sea level's bathymetry</strong><p>Left: depth below MSL at 1.5 km (red line: MSL; white: 2 m). Right: MSL − LAT from TPXO9, taken in open water and carried to the coast. Inland, where it is carried along the rivers, it is not used.</p></figcaption></figure>
 </section>
 <section id="uses" class="chapter"><header class="chap"><span class="eyebrow">Uses</span><h2>Boundaries for other setups</h2></header>
 <p>A NEAB run can write hourly elevation, transports and velocities of its levels. <code>nesting-boundaries</code>
