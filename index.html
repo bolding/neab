@@ -243,6 +243,7 @@ north-western shelf), but that is a smaller effect.</li></ul>
 <tr><td>the same, z0 0.015 m × min(1, H/10 m) in the Wadden Sea level</td><td>1.49</td><td>1.96</td><td>0.24 m</td></tr>
 <tr><td>north_sea_baltic with <a href="#depths">EMODnet depths</a> instead of GEBCO</td><td>1.95</td><td>2.79</td><td>0.34 m</td></tr>
 <tr><td>all levels <a href="#depths">from LAT to MSL</a></td><td>2.05</td><td>3.24</td><td>0.40 m</td></tr>
+<tr><td>from LAT to MSL, with the Wadden Sea level (flats from M2, z0 0.002 m)</td><td>1.72</td><td>2.45</td><td>0.30 m</td></tr>
 </tbody></table></div>
 <p>A few more shallow cells along the coasts move the German Bight amphidrome and lower the Skagerrak by 13 %.
 Much more friction over the shallow water that is already there does almost nothing, except locally. So it is
@@ -330,9 +331,18 @@ in 55,000 of its 101,000 wet cells, keeping the mask and the fixes. The result i
 run: rms 0.173 m over all gauges, the Southern Bight 0.82 of TPXO9. Only the Skagerrak goes up, from 2.40 to 2.79
 times TPXO9, Skagen from 0.29 m to 0.34 m. The deeper water off Jutland moves the tide the wrong way there.</p>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/emodnet_minus_gebco.png" aria-label="Open EMODnet − GEBCO in north_sea_baltic full size"><img src="fig/emodnet_minus_gebco.png" alt="EMODnet − GEBCO in north_sea_baltic" loading="lazy"></button><figcaption><strong>EMODnet − GEBCO in north_sea_baltic</strong><p>The depth change from GEBCO to EMODnet (cell means; red: EMODnet deeper), limited to half the depth.</p></figcaption></figure>
-<p>A run with both, the depths from LAT to MSL and the Wadden Sea level with its flats (from M2, z0 0.002 m), is
-under way: the flats lowered the Skagerrak but took tide from the German Bight, the deeper shelf does the
-opposite.</p>
+<p><b>Both together.</b> The flats lowered the Skagerrak but took tide from the German Bight, and the deeper
+shelf does the opposite, so a third run combines them: all levels from LAT to MSL, plus the Wadden Sea level with
+its flats (from M2, z0 0.002 m). The two effects roughly add up. Against the LAT → MSL run, the Skagerrak comes
+down from 3.24 to 2.45 times TPXO9, back to the control run's level, and Skagen from 0.40 m to 0.30 m. The Kattegat
+gauges are as good as in the control run (danish_straits rms 0.08 m), and the Norwegian amphidrome moves to about
+5.6°E 58.5°N, closer to TPXO9's. The Southern Bight keeps its gain (0.94). But the Wadden Sea loses tide again:
+List 0.65 m (observed 0.78 m), Cuxhaven Mittelgrund 1.18 m (1.37 m), Eemshaven 1.00 m (1.15 m). Over the North Sea
+gauges the rms is 0.16 m against 0.15 m without the flats, and 0.153 m against 0.149 m over all gauges. The flats
+in this run are still those made for the old datum, with MSL − LAT from M2 alone. The next step is the flats with
+the same MSL − LAT as the rest (<code>lat_to_msl.py</code>'s, which lies between the M2 amplitude and the sum of all
+amplitudes), and then the depths of the Norwegian Trench and the Skagerrak.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/msl_wadden_vs_tpxo_m2.png" aria-label="Open M2 with the depths from LAT to MSL and the Wadden Sea level full size"><img src="fig/msl_wadden_vs_tpxo_m2.png" alt="M2 with the depths from LAT to MSL and the Wadden Sea level" loading="lazy"></button><figcaption><strong>M2 with the depths from LAT to MSL and the Wadden Sea level</strong><p>North_sea_baltic with all levels from LAT to MSL and the Wadden Sea level, against TPXO9 (as the figure above). Where the Wadden Sea level computes, north_sea_baltic has no values.</p></figcaption></figure>
 </section>
 <section id="reference" class="chapter"><header class="chap"><span class="eyebrow">Reference</span><h2>Tidal maps for model comparisons</h2></header>
 <p>As a common reference for comparing models, the twelve TPXO9-atlas constituents (M2, S2, N2, K2, K1, O1, P1,
