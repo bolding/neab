@@ -241,6 +241,8 @@ north-western shelf), but that is a smaller effect.</li></ul>
 <tr><td>a <a href="#wadden">Wadden Sea level</a> with the intertidal flats (1.5 km), z0 0.015 m</td><td>1.54</td><td>2.04</td><td>0.25 m</td></tr>
 <tr><td>the same, z0 0.002 m in the Wadden Sea level</td><td>1.51</td><td>1.81</td><td>0.22 m</td></tr>
 <tr><td>the same, z0 0.015 m × min(1, H/10 m) in the Wadden Sea level</td><td>1.49</td><td>1.96</td><td>0.24 m</td></tr>
+<tr><td>north_sea_baltic with <a href="#depths">EMODnet depths</a> instead of GEBCO</td><td>1.95</td><td>2.79</td><td>0.34 m</td></tr>
+<tr><td>all levels <a href="#depths">from LAT to MSL</a></td><td>2.05</td><td>3.24</td><td>0.40 m</td></tr>
 </tbody></table></div>
 <p>A few more shallow cells along the coasts move the German Bight amphidrome and lower the Skagerrak by 13 %.
 Much more friction over the shallow water that is already there does almost nothing, except locally. So it is
@@ -298,12 +300,39 @@ more cells above MSL. With z0 0.002 m in the Wadden Sea level, the German Bight 
 Helgoland, Cuxhaven and Wilhelmshaven to within 10–20 % of the gauges. The Skagerrak, however, drops less (1.98
 instead of 1.81 times TPXO9). Over all gauges the two flat heights are equal (0.18 m against 0.19 m), and both are
 still above the control run's 0.17 m. Higher flats help the Wadden Sea and cost the Skagerrak, so the flats alone
-do not settle it. Two tests of the North Sea depths are under way. In the first, all levels are taken from LAT to
-MSL: EMODnet, and GEBCO built from it, give depths below LAT, so the shelf is 1–3 m too shallow and the tide too
-slow. In the second, north_sea_baltic takes its North Sea depths from EMODnet instead of GEBCO: GEBCO 2026 is a
-patchwork there, about 0.5 m shallower than EMODnet in the south-eastern North Sea and 2–4 m shallower off Jutland,
-with straight seams between its sources.</p>
+do not settle it.</p>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/wadden_vs_tpxo_m2.png" aria-label="Open M2 with the Wadden Sea level full size"><img src="fig/wadden_vs_tpxo_m2.png" alt="M2 with the Wadden Sea level" loading="lazy"></button><figcaption><strong>M2 with the Wadden Sea level</strong><p>North_sea_baltic with the Wadden Sea level, against TPXO9 (as the figure above). Where the Wadden Sea level computes, north_sea_baltic has no values.</p></figcaption></figure>
+<h3 id="depths">The depth datum and the depth source</h3>
+<p>Two 31-day runs test the North Sea depths themselves, without the Wadden Sea level.</p>
+<p><b>LAT to MSL.</b> EMODnet gives depths below the lowest astronomical tide (LAT), and GEBCO 2026 is built from
+it on the shelf, while pyGETM's elevation is relative to mean sea level. So the shelf is too shallow by MSL − LAT.
+<code>NEAB/scripts/lat_to_msl.py</code> computes MSL − LAT as LAT is defined: the lowest level of a TPXO9 prediction
+(12 constituents, nodal corrections), hourly over 2015 and 2024, near both ends of the 18.6-year nodal cycle, on
+a 1/10° grid. That gives about 1.6 m at Den Helder, 2.8 m at Cuxhaven, 2.0 m at Esbjerg, 4.7 m at Dover and 7 m at
+Saint-Malo. The offset is added to every cell at least 5 m below LAT, so the set of wet cells stays the same. The
+median change is 0.9 m in north_sea_baltic and 1.4 m in the root.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/msl_minus_lat.png" aria-label="Open MSL − LAT from TPXO9 full size"><img src="fig/msl_minus_lat.png" alt="MSL − LAT from TPXO9" loading="lazy"></button><figcaption><strong>MSL − LAT from TPXO9</strong><p>Minus the lowest level of hourly TPXO9 predictions over 2015 and 2024, on every third point of the reference file (1/10°).</p></figcaption></figure>
+<p>The deeper shelf is the larger improvement so far. Over north_sea_baltic's 225 gauges the M2 rms error drops from
+0.19 m to 0.15 m, and over all 369 gauges from 0.17 m to 0.15 m. The Southern Bight comes from 0.81 to 0.95 of TPXO9,
+Hoek van Holland from 0.54 m to 0.70 m (observed 0.78 m), Helgoland from 0.98 m to 1.06 m (1.06 m), and the
+German Bight and Southern Bight amphidromes move to within 0.1–0.2° of TPXO9's. But the Skagerrak gets worse:
+3.2 times TPXO9, Skagen 0.40 m (observed 0.14 m), and the Kattegat gauges with it (danish_straits rms 0.12 m
+against 0.07 m). The map shows why. The Norwegian amphidrome lies at about 5.3°E 58.6°N, against 6.0°E 58.3°N in
+TPXO9, so the Skagerrak lies further from it. With the south-eastern amphidromes right, the Skagerrak error is
+now on the Norwegian side: the depths of the Norwegian Trench and the Skagerrak, which LAT → MSL hardly changes
+(MSL − LAT is 0.2–0.5 m there), or how the tide enters along the Norwegian coast.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/msl_vs_tpxo_m2.png" aria-label="Open M2 with the depths from LAT to MSL full size"><img src="fig/msl_vs_tpxo_m2.png" alt="M2 with the depths from LAT to MSL" loading="lazy"></button><figcaption><strong>M2 with the depths from LAT to MSL</strong><p>North_sea_baltic with all levels from LAT to MSL, against TPXO9 (as the figure above).</p></figcaption></figure>
+<p><b>EMODnet instead of GEBCO.</b> GEBCO 2026 is a patchwork in the North Sea. It is about 0.5 m shallower than
+EMODnet in the Southern Bight and the German Bight, about the same in the central North Sea, and 2–4 m
+shallower off Jutland, with straight seams at 0.5°E and 60°N between its sources.
+<code>NEAB/scripts/swap_depth_source.py</code> adds the difference of the two cell means to north_sea_baltic's depths,
+in 55,000 of its 101,000 wet cells, keeping the mask and the fixes. The result is almost the same as the control
+run: rms 0.173 m over all gauges, the Southern Bight 0.82 of TPXO9. Only the Skagerrak goes up, from 2.40 to 2.79
+times TPXO9, Skagen from 0.29 m to 0.34 m. The deeper water off Jutland moves the tide the wrong way there.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/emodnet_minus_gebco.png" aria-label="Open EMODnet − GEBCO in north_sea_baltic full size"><img src="fig/emodnet_minus_gebco.png" alt="EMODnet − GEBCO in north_sea_baltic" loading="lazy"></button><figcaption><strong>EMODnet − GEBCO in north_sea_baltic</strong><p>The depth change from GEBCO to EMODnet (cell means; red: EMODnet deeper), limited to half the depth.</p></figcaption></figure>
+<p>A run with both, the depths from LAT to MSL and the Wadden Sea level with its flats (from M2, z0 0.002 m), is
+under way: the flats lowered the Skagerrak but took tide from the German Bight, the deeper shelf does the
+opposite.</p>
 </section>
 <section id="reference" class="chapter"><header class="chap"><span class="eyebrow">Reference</span><h2>Tidal maps for model comparisons</h2></header>
 <p>As a common reference for comparing models, the twelve TPXO9-atlas constituents (M2, S2, N2, K2, K1, O1, P1,
@@ -327,12 +356,13 @@ from <code>NEAB/scripts/tide_reference.py</code>.</p>
 <p>The same TPXO9 constituents give time series at any point, predicted as pyGETM does at its open boundaries (all
 twelve constituents, nodal corrections), with model runs on top (<code>NEAB/scripts/tide_series.py</code>). January
 2020 in the Bristol Channel (Hinkley Point) and at Saint-Malo, two of the largest tides in the area, both with a
-range of over 11 m at springs, against NEAB's control run. The series are taken at the nearest TPXO9 node with
+range of over 11 m at springs, against NEAB's control run and the run with its depths from LAT to MSL. The series are taken at the nearest TPXO9 node with
 tidal constants: at Hinkley Point that is 11 km out in the channel (M2 3.72 m against 3.92 m at the gauge), at
 Saint-Malo 3 km off (3.68 m against 3.67 m). NEAB's spring tides in the Bristol Channel are about 0.5 m too
 small, and its neaps at Saint-Malo a little too large. Part of the rms difference comes from NEAB's hourly
-output, which cuts the peaks.</p>
-<figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_series_neab.png" aria-label="Open January 2020 at Hinkley Point and Saint-Malo full size"><img src="fig/tpxo9_series_neab.png" alt="January 2020 at Hinkley Point and Saint-Malo" loading="lazy"></button><figcaption><strong>January 2020 at Hinkley Point and Saint-Malo</strong><p>TPXO9 (black) and NEAB's control run (north_sea_baltic, 31 days, z0 0.015 m), shifted to zero mean; the rms difference is in the legend.</p></figcaption></figure>
+output, which cuts the peaks. The deeper shelf brings M2 at the Hinkley Point gauge from 3.58 m to 3.73 m (observed
+3.89 m) but hardly changes the rms differences of the series (0.63 m and 0.38 m).</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_series_neab.png" aria-label="Open January 2020 at Hinkley Point and Saint-Malo full size"><img src="fig/tpxo9_series_neab.png" alt="January 2020 at Hinkley Point and Saint-Malo" loading="lazy"></button><figcaption><strong>January 2020 at Hinkley Point and Saint-Malo</strong><p>TPXO9 (black), NEAB's control run and the run with depths from LAT to MSL (north_sea_baltic, 31 days, z0 0.015 m), shifted to zero mean; the rms difference is in the legend.</p></figcaption></figure>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_baltic_s2_k1_o1.png" aria-label="Open S2, K1 and O1 in the Baltic full size"><img src="fig/tpxo9_baltic_s2_k1_o1.png" alt="S2, K1 and O1 in the Baltic" loading="lazy"></button><figcaption><strong>S2, K1 and O1 in the Baltic</strong><p>In the central Baltic the diurnal K1 and O1 are as large as M2: medians of 0.6–0.7 cm.</p></figcaption></figure>
 </section>
 <section id="uses" class="chapter"><header class="chap"><span class="eyebrow">Uses</span><h2>Boundaries for other setups</h2></header>
