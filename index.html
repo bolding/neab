@@ -148,7 +148,7 @@ dialog#lightbox::backdrop { background: rgb(8 14 18 / 0.86); }
 .foot { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.88rem; color: var(--ink-2); }
 </style>
 <style>main > .chapter { max-width: var(--wide); }</style></head><body>
-<div class="topbar"><div class="topin"><a class="brand" href="#top">NEAB</a><nav aria-label="Chapters"><a href="#setup">Setup</a><a href="#tides">Runs</a><a href="#northsea">North Sea</a><a href="#uses">Uses</a><a href="#pygetm">pyGETM</a></nav></div></div>
+<div class="topbar"><div class="topin"><a class="brand" href="#top">NEAB</a><nav aria-label="Chapters"><a href="#setup">Setup</a><a href="#tides">Runs</a><a href="#northsea">North Sea</a><a href="#reference">Reference</a><a href="#uses">Uses</a><a href="#pygetm">pyGETM</a></nav></div></div>
 <main id="top">
 <header class="hero">
   <p class="draft">Under development · updated 2 November 2026</p>
@@ -293,6 +293,26 @@ height: MSL − LAT from the amplitude sum is an upper bound, so the flats may l
 Checking them against a survey-based bathymetry with heights is the next step, and production runs need a closer
 look at the bathymetry in any case.</p>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/wadden_vs_tpxo_m2.png" aria-label="Open M2 with the Wadden Sea level full size"><img src="fig/wadden_vs_tpxo_m2.png" alt="M2 with the Wadden Sea level" loading="lazy"></button><figcaption><strong>M2 with the Wadden Sea level</strong><p>North_sea_baltic with the Wadden Sea level, against TPXO9 (as the figure above). Where the Wadden Sea level computes, north_sea_baltic has no values.</p></figcaption></figure>
+</section>
+<section id="reference" class="chapter"><header class="chap"><span class="eyebrow">Reference</span><h2>Tidal maps for model comparisons</h2></header>
+<p>As a common reference for comparing models, the twelve TPXO9-atlas constituents (M2, S2, N2, K2, K1, O1, P1,
+Q1, M4, MS4, MN4, 2N2) are cut to the AMM7 area, extended east and north to hold the whole Baltic: 20°W–31°E,
+40–66°N, on TPXO9-atlas's own 1/30° grid. The file <code>tpxo9_atlas_amm7_baltic.nc</code> (15 MB, in
+<code>TPXO9/maps</code> beside the TPXO9 data) holds, for every constituent:</p>
+<ul><li>the amplitude (m) and the Greenwich phase lag (°): the cotidal lines are the contours of the phase;</li>
+<li>the complex amplitude (re, im), for interpolation onto a model grid without the jump at 0/360°;</li>
+<li>TPXO9's depth and water mask.</li></ul>
+<p>These are harmonic constants without nodal corrections. Only water connected to the Atlantic is kept. Inside the
+box the Mediterranean is cut off (Gibraltar lies south of 40°N), and TPXO9-atlas has amplitudes of metres there
+that are not real, in the Adriatic. TPXO9 is fitted to altimetry and tide gauges, so it is a good reference
+offshore and on the open shelf. In the Wadden Sea, the inner Danish waters and the Baltic, with tides of a few
+centimetres, it is a guide, to be used together with gauges. In the Baltic its local patches show edges against its
+coarser global solution (Gulf of Finland, Gulf of Riga, 24°E in the Bothnian Bay). The file and the figures come
+from <code>NEAB/scripts/tide_reference.py</code>.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_m2.png" aria-label="Open TPXO9-atlas M2 full size"><img src="fig/tpxo9_m2.png" alt="TPXO9-atlas M2" loading="lazy"></button><figcaption><strong>TPXO9-atlas M2</strong><p>M2 amplitude and cotidal lines every 30° (Greenwich phase) over the whole box; red, dashed: the AMM7 domain.</p></figcaption></figure>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_m2_zooms.png" aria-label="Open M2 in the North Sea and the Baltic full size"><img src="fig/tpxo9_m2_zooms.png" alt="M2 in the North Sea and the Baltic" loading="lazy"></button><figcaption><strong>M2 in the North Sea and the Baltic</strong><p>Left: the North Sea and its three amphidromes. Right: the Baltic with the colour scale to 5 cm.</p></figcaption></figure>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_constituents.png" aria-label="Open All twelve constituents full size"><img src="fig/tpxo9_constituents.png" alt="All twelve constituents" loading="lazy"></button><figcaption><strong>All twelve constituents</strong><p>Amplitude and cotidal lines every 30° for each constituent, each with its own colour scale.</p></figcaption></figure>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/tpxo9_baltic_s2_k1_o1.png" aria-label="Open S2, K1 and O1 in the Baltic full size"><img src="fig/tpxo9_baltic_s2_k1_o1.png" alt="S2, K1 and O1 in the Baltic" loading="lazy"></button><figcaption><strong>S2, K1 and O1 in the Baltic</strong><p>In the central Baltic the diurnal K1 and O1 are as large as M2: medians of 0.6–0.7 cm.</p></figcaption></figure>
 </section>
 <section id="uses" class="chapter"><header class="chap"><span class="eyebrow">Uses</span><h2>Boundaries for other setups</h2></header>
 <p>A NEAB run can write hourly elevation, transports and velocities of its levels. <code>nesting-boundaries</code>
