@@ -244,6 +244,7 @@ north-western shelf), but that is a smaller effect.</li></ul>
 <tr><td>north_sea_baltic with <a href="#depths">EMODnet depths</a> instead of GEBCO</td><td>1.95</td><td>2.79</td><td>0.34 m</td></tr>
 <tr><td>all levels <a href="#depths">from LAT to MSL</a></td><td>2.05</td><td>3.24</td><td>0.40 m</td></tr>
 <tr><td>from LAT to MSL, with the Wadden Sea level (flats from M2, z0 0.002 m)</td><td>1.72</td><td>2.45</td><td>0.30 m</td></tr>
+<tr><td>the same, the flats from the same MSL − LAT as the other levels</td><td>1.37</td><td>1.96</td><td>0.24 m</td></tr>
 </tbody></table></div>
 <p>A few more shallow cells along the coasts move the German Bight amphidrome and lower the Skagerrak by 13 %.
 Much more friction over the shallow water that is already there does almost nothing, except locally. So it is
@@ -339,10 +340,21 @@ gauges are as good as in the control run (danish_straits rms 0.08 m), and the No
 5.6°E 58.5°N, closer to TPXO9's. The Southern Bight keeps its gain (0.94). But the Wadden Sea loses tide again:
 List 0.65 m (observed 0.78 m), Cuxhaven Mittelgrund 1.18 m (1.37 m), Eemshaven 1.00 m (1.15 m). Over the North Sea
 gauges the rms is 0.16 m against 0.15 m without the flats, and 0.153 m against 0.149 m over all gauges. The flats
-in this run are still those made for the old datum, with MSL − LAT from M2 alone. The next step is the flats with
-the same MSL − LAT as the rest (<code>lat_to_msl.py</code>'s, which lies between the M2 amplitude and the sum of all
-amplitudes), and then the depths of the Norwegian Trench and the Skagerrak.</p>
+in this run are still those made for the old datum, with MSL − LAT from M2 alone.</p>
 <figure class="fig wide"><button class="plate" type="button" data-full="fig/msl_wadden_vs_tpxo_m2.png" aria-label="Open M2 with the depths from LAT to MSL and the Wadden Sea level full size"><img src="fig/msl_wadden_vs_tpxo_m2.png" alt="M2 with the depths from LAT to MSL and the Wadden Sea level" loading="lazy"></button><figcaption><strong>M2 with the depths from LAT to MSL and the Wadden Sea level</strong><p>North_sea_baltic with all levels from LAT to MSL and the Wadden Sea level, against TPXO9 (as the figure above). Where the Wadden Sea level computes, north_sea_baltic has no values.</p></figcaption></figure>
+<p><b>One datum for all levels.</b> A last run builds the flats with the same MSL − LAT as the other levels
+(<code>wadden_bathymetry.py --offset</code>, the lowest level of the two-year TPXO9 prediction). In the inner Wadden
+Sea that is much larger than before: 1.6 m at Harlingen, 1.9 m at Delfzijl and 2.7 m at Wilhelmshaven, against
+0.1–0.9 m from the amplitude sum carried in from open water. So the flats there lie lower. This gives the best
+Skagerrak and Kattegat of all runs: the Skagerrak at 1.96 times TPXO9, off Jutland 1.37, Skagen 0.24 m, and the
+Kattegat gauges at an rms of 0.056 m, against 0.074 m in the control run. The Norwegian Sea side is unchanged. But
+the Wadden Sea level loses more tide: Helgoland 0.91 m (observed 1.06 m), Den Helder 0.48 m (0.64 m), Eemshaven
+0.93 m (1.15 m), rms 0.29 m over its 53 gauges. Over all 370 gauges the rms is 0.157 m, against 0.149 m without the
+Wadden Sea level and 0.173 m in the control run. More water over the flats takes more tide out of the German Bight,
+and that is what brings the Skagerrak down. The Wadden Sea itself then needs less dissipation: less friction or
+more resolution in its channels, at 1.5 km now. That is the next test, together with the depths of the Norwegian
+Trench and the Skagerrak.</p>
+<figure class="fig wide"><button class="plate" type="button" data-full="fig/msl_wadden_msl_vs_tpxo_m2.png" aria-label="Open M2 with one datum for all levels full size"><img src="fig/msl_wadden_msl_vs_tpxo_m2.png" alt="M2 with one datum for all levels" loading="lazy"></button><figcaption><strong>M2 with one datum for all levels</strong><p>North_sea_baltic with all levels and the Wadden Sea flats from LAT to MSL with the same MSL − LAT, against TPXO9.</p></figcaption></figure>
 </section>
 <section id="reference" class="chapter"><header class="chap"><span class="eyebrow">Reference</span><h2>Tidal maps for model comparisons</h2></header>
 <p>As a common reference for comparing models, the twelve TPXO9-atlas constituents (M2, S2, N2, K2, K1, O1, P1,
